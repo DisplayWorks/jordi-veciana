@@ -260,6 +260,14 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
     navigate(e.clientX - rect.left < rect.width / 2 ? -1 : 1)
   }
 
+  function handleDesktopTouch(e) {
+    if (e.target.closest('a')) return
+    e.preventDefault()
+    const touch = e.changedTouches[0]
+    const rect = e.currentTarget.getBoundingClientRect()
+    navigate(touch.clientX - rect.left < rect.width / 2 ? -1 : 1)
+  }
+
   function handleMouseMove(e) {
     const rect = e.currentTarget.getBoundingClientRect()
     setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd')
@@ -304,8 +312,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onTouchEnd={handleDesktopTouch}
     >
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
