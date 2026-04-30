@@ -118,7 +118,7 @@
   align-items: flex-start;
   padding: var(--margin-s) var(--margin-s) var(--margin-l);
   font-family: var(--font);
-  font-size: var(--fs);
+  font-size: 17px;
   font-weight: 400;
   line-height: normal;
   color: #000;
@@ -194,6 +194,6 @@
 .animateInRight { animation: slideInRight 0.28s cubic-bezier(0.4,0,0.2,1) forwards; }
 .animateInLeft  { animation: slideInLeft  0.28s cubic-bezier(0.4,0,0.2,1) forwards; }
 
-.tapZone { position: fixed; top: 0; bottom: 0; width: 10%; z-index: 10; }
+.tapZone { position: fixed; top: 0; bottom: 0; width: 20%; z-index: 10; }
 .tapZoneLeft  { left: 0; }
 .tapZoneRight { right: 0; }
