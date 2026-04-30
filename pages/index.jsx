@@ -187,6 +187,7 @@ function CoverMobile2({ coverImageSrc, onNext, onPrev }) {
 export default function Magazine({ projects, globalMail, coverImage1Src, coverImage2Src, coverVariant }) {
   const [index, setIndex] = useState(-1)
   const [mobile, setMobile] = useState(false)
+  const [isTouch, setIsTouch] = useState(false)
   const [dir, setDir]       = useState('fwd')
   const [animKey, setAnimKey] = useState(0)
   const touchStartX         = useRef(null)
