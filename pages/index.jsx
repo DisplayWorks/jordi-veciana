@@ -306,14 +306,6 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   ].filter(Boolean)
 
   /* ── DESKTOP — no animation ── */
-  // Tablet landscape: desktop layout + touch navigation
-  function handleTabletSwipe(e) {
-    if (e.target.closest('a')) return
-    const touch = e.changedTouches[0]
-    const rect = e.currentTarget.getBoundingClientRect()
-    navigate(touch.clientX - rect.left < rect.width / 2 ? -1 : 1)
-  }
-
   if (!mobile) return (
     <>
       <Head>
@@ -327,7 +319,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
-      onTouchEnd={isTouch ? handleTabletSwipe : undefined}
+      onTouchEnd={handleDesktopTouch}
     >
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
