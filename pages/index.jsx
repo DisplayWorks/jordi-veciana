@@ -332,7 +332,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const animClass = dir === 'fwd' ? styles.animateInRight : styles.animateInLeft
 
   return (
-    <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div className={styles.mobileWrapper} style={{background:"red"}} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={`${styles.tapZone} ${styles.tapZoneLeft}`}  onClick={() => navigate(-1)} />
       <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)}  />
       <div key={animKey} className={animClass} style={{ width: '100%' }}>
