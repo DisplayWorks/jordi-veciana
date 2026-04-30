@@ -317,7 +317,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       </Head>
     <div
       className={styles.desktopWrapper}
-      style={{ cursor: `url('${cursorUrl}') 8 8, ${cursorFallback}`, touchAction: 'manipulation', background: 'blue' }}
+      style={{ cursor: `url('${cursorUrl}') 8 8, ${cursorFallback}`, touchAction: 'manipulation' }}
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
