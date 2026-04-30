@@ -47,7 +47,7 @@ function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
   return (
     <div
       className={styles.desktopWrapper}
-      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px', background: 'green' }}
+      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px', background: 'transparent' }}
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
       onMouseLeave={() => setDir('fwd')}
@@ -115,7 +115,7 @@ function CoverDesktop2({ coverImageSrc, onNext, onPrev, dir, setDir }) {
       className={styles.desktopWrapper}
       style={{
         cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`,
-        display: 'flex', gap: '16px', padding: '16px', background: 'green'
+        display: 'flex', gap: '16px', padding: '16px', background: 'transparent'
       }}
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
@@ -193,11 +193,13 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(orientation: portrait)'); console.log("is portrait:", mq.matches, "width:", window.innerWidth)
-    setMobile(mq.matches)
+    const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
+    setIsTouch(touch)
+    const portrait = window.matchMedia('(orientation: portrait)')
+    setMobile(portrait.matches)
     const h = e => setMobile(e.matches)
-    mq.addEventListener('change', h)
-    return () => mq.removeEventListener('change', h)
+    portrait.addEventListener('change', h)
+    return () => portrait.removeEventListener('change', h)
   }, [])
 
   // Read hash after mount to avoid hydration mismatch
@@ -300,6 +302,14 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   ].filter(Boolean)
 
   /* ── DESKTOP — no animation ── */
+  // Tablet landscape: desktop layout + touch navigation
+  function handleTabletSwipe(e) {
+    if (e.target.closest('a')) return
+    const touch = e.changedTouches[0]
+    const rect = e.currentTarget.getBoundingClientRect()
+    navigate(touch.clientX - rect.left < rect.width / 2 ? -1 : 1)
+  }
+
   if (!mobile) return (
     <>
       <Head>
@@ -313,7 +323,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
-      onTouchEnd={handleDesktopTouch}
+      onTouchEnd={isTouch ? handleTabletSwipe : undefined}
     >
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
@@ -334,7 +344,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const animClass = dir === 'fwd' ? styles.animateInRight : styles.animateInLeft
 
   return (
-    <div className={styles.mobileWrapper} style={{background:"red"}} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={`${styles.tapZone} ${styles.tapZoneLeft}`}  onClick={() => navigate(-1)} />
       <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)}  />
       <div key={animKey} className={animClass} style={{ width: '100%' }}>
