@@ -199,7 +199,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       const portrait = window.matchMedia('(orientation: portrait)')
       setMobile(portrait.matches)
       const h = e => setMobile(e.matches)
-      portrait.addEventListener('chawie', h)
+      portrait.addEventListener('change', h)
       return () => portrait.removeEventListener('change', h)
     } catch(e) {
       console.error('media query error', e)
