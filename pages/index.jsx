@@ -85,7 +85,7 @@ function Cover({ onNext }) {
   )
 }
 
-export default function Magazine({ projects, globalMail, coverImage1Src, coverImage2Src, coverVariant }) {
+export default function Magazine({ projects, globalMail }) {
   const [index, setIndex] = useState(-1)
   const [mobile, setMobile] = useState(false)
   const [isTouch, setIsTouch] = useState(false)
@@ -281,9 +281,6 @@ export async function getStaticProps() {
     props: {
       projects,
       globalMail: settings?.inquiryEmail || 'mail@jordiveciana.com',
-      coverImage1Src: settings?.coverImage1Src || null,
-      coverImage2Src: settings?.coverImage2Src || null,
-      coverVariant: settings?.coverVariant || 1,
     },
     revalidate: 60,
   }
