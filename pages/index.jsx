@@ -43,142 +43,43 @@ function ProjectImages({ images, layout, noGap }) {
 
 const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 
-function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
+function Cover({ onNext }) {
   return (
     <div
-      className={styles.desktopWrapper}
-      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px' }}
-      onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
-      onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
-      onMouseLeave={() => setDir('fwd')}
-      onTouchEnd={e => { const touch = e.changedTouches[0]; const rect = e.currentTarget.getBoundingClientRect(); touch.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
-    >
-      {/* Left 50% — image, pl 144px */}
-      <div style={{ flex: '0 0 50%', padding: '8px 8px 8px 80px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' }}>
-        {coverImageSrc && (
-          <img src={coverImageSrc} alt=""
-            style={{ display: 'block', width: 'auto', height: 'auto', maxWidth: '70%', maxHeight: '65vh' }} />
-        )}
-      </div>
-      {/* Right flex-1 — text, pr 144px */}
-      <div style={{ flex: '1 0 0', paddingRight: '144px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
-        <div style={{ textAlign: 'center', width: '100%' }}>
-          <p>Jordi Veciana</p>
-          <p>Selected Works 2018 — 2026</p>
-        </div>
-        <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ flex: '1 0 0' }} />
-          <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function CoverMobile({ coverImageSrc, onNext, onPrev }) {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', padding: '16px', fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px', WebkitFontSmoothing: 'antialiased' }}>
-      {/* Top half — text vertically centred */}
-      <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
-        <div style={{ textAlign: 'center', width: '100%' }}>
-          <p>Jordi Veciana</p>
-          <p>Selected Works 2018 — 2026</p>
-        </div>
-        <div style={{ display: 'flex', width: '100%' }}>
-          <div style={{ flex: '1 0 0' }} />
-          <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
-        </div>
-        <div className={styles.mobileNav}>
-          <button className={styles.navArrow} onClick={onPrev}>
-            <img src="/cursor-bck.svg" alt="" width="11" height="13" />
-          </button>
-          <button className={styles.navArrow} onClick={onNext}>
-            <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
-          </button>
-        </div>
-      </div>
-      {/* Bottom half — image */}
-      {coverImageSrc && (
-        <div style={{ flex: '1 0 0', overflow: 'hidden' }}>
-          <img src={coverImageSrc} alt=""
-            style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }} />
-        </div>
-      )}
-    </div>
-  )
-}
-
-
-function CoverDesktop2({ coverImageSrc, onNext, onPrev, dir, setDir }) {
-  return (
-    <div
-      className={styles.desktopWrapper}
+      onClick={onNext}
       style={{
-        cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`,
-        display: 'flex', gap: '16px', padding: '16px'
+        width: '100%',
+        height: '100dvh',
+        padding: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        cursor: "url('/cursor-fwd.svg') 8 8, e-resize",
+        fontFamily: "'Monument Grotesk', sans-serif",
+        fontSize: '15px',
+        lineHeight: 'normal',
+        WebkitFontSmoothing: 'antialiased',
+        background: '#fff',
       }}
-      onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
-      onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
-      onMouseLeave={() => setDir('fwd')}
-      onTouchEnd={e => { const touch = e.changedTouches[0]; const rect = e.currentTarget.getBoundingClientRect(); touch.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
     >
-      {/* Left half — image fills completely */}
-      <div style={{ flex: '1 0 0', minWidth: '1px', position: 'relative', overflow: 'hidden' }}>
-        {coverImageSrc && (
-          <img src={coverImageSrc} alt=""
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block', pointerEvents: 'none' }} />
-        )}
-      </div>
-      {/* Right half — text vertically centred */}
-      <div style={{ flex: '1 0 0', minWidth: '1px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', height: '100%' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'flex-start', width: '100%' }}>
-          <div style={{ textAlign: 'center', width: '100%' }}>
-            <p>Jordi Veciana</p>
-            <p>Selected Works 2018 — 2026</p>
-          </div>
-          <div style={{ display: 'flex', width: '100%' }}>
-            <div style={{ flex: '1 0 0' }} />
-            <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function CoverMobile2({ coverImageSrc, onNext, onPrev }) {
-  return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', gap: '16px',
-      padding: '16px', height: '100dvh',
-      fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px',
-      WebkitFontSmoothing: 'antialiased'
-    }}>
-      {/* Top half — text vertically centred */}
-      <div style={{ flex: '1 0 0', minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
+        {/* Title — centred */}
         <div style={{ textAlign: 'center', width: '100%' }}>
           <p>Jordi Veciana</p>
           <p>Selected Works 2018 — 2026</p>
         </div>
+        {/* Categories — right half */}
         <div style={{ display: 'flex', width: '100%' }}>
           <div style={{ flex: '1 0 0' }} />
           <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
         </div>
-        <div className={styles.mobileNav}>
-          <button className={styles.navArrow} onClick={onPrev}>
-            <img src="/cursor-bck.svg" alt="" width="11" height="13" />
-          </button>
-          <button className={styles.navArrow} onClick={onNext}>
+        {/* Arrow — right half */}
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ flex: '1 0 0' }} />
+          <div style={{ flex: '1 0 0' }}>
             <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
-          </button>
+          </div>
         </div>
-      </div>
-      {/* Bottom half — image fills with slight overflow */}
-      <div style={{ flex: '1 0 0', minHeight: 0, position: 'relative', overflow: 'hidden' }}>
-        {coverImageSrc && (
-          <img src={coverImageSrc} alt=""
-            style={{ position: 'absolute', width: '100%', height: '113.94%', top: '-6.97%', left: 0, objectFit: 'cover', objectPosition: 'center', display: 'block', pointerEvents: 'none' }} />
-        )}
       </div>
     </div>
   )
