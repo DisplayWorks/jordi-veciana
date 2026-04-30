@@ -10,6 +10,7 @@
 
 
 .desktopWrapper {
+  touch-action: manipulation;
   position: relative;
   width: 100%;
   height: 100vh;
