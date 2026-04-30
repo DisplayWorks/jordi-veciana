@@ -51,6 +51,7 @@ function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
       onMouseLeave={() => setDir('fwd')}
+      onTouchEnd={e => { const touch = e.changedTouches[0]; const rect = e.currentTarget.getBoundingClientRect(); touch.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
     >
       {/* Left 50% — image, pl 144px */}
       <div style={{ flex: '0 0 50%', padding: '8px 8px 8px 80px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' }}>
@@ -119,6 +120,7 @@ function CoverDesktop2({ coverImageSrc, onNext, onPrev, dir, setDir }) {
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
       onMouseLeave={() => setDir('fwd')}
+      onTouchEnd={e => { const touch = e.changedTouches[0]; const rect = e.currentTarget.getBoundingClientRect(); touch.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
     >
       {/* Left half — image fills completely */}
       <div style={{ flex: '1 0 0', minWidth: '1px', position: 'relative', overflow: 'hidden' }}>
