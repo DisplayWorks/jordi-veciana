@@ -332,7 +332,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
         </div>
       </div>
       <ProjectImages images={project.images || []} layout={layout} noGap={project.noImageGap} />
-      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
+      {isTouch && <><div onClick={() => navigate(-1)} style={{ position: "absolute", left: 0, top: 0, width: "50%", height: "100%", zIndex: 5 }} /><div onClick={() => navigate(1)} style={{ position: "absolute", right: 0, top: 0, width: "50%", height: "100%", zIndex: 5 }} /></>}      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
     </div>
     </>
   )
