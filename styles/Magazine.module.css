@@ -141,8 +141,8 @@
 .mobileImgContainer img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: contain;
+  object-position: top center;
   display: block;
 }
 
@@ -180,11 +180,6 @@
   align-items: flex-end;
   width: 100%;
   white-space: nowrap;
-  position: fixed;
-  bottom: var(--margin-s);
-  left: var(--margin-s);
-  right: var(--margin-s);
-  width: calc(100% - var(--margin-s) * 2);
 }
 .mobileFooter .footerNav { justify-content: center; }
 

@@ -216,13 +216,13 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
     }
   }, [])
 
-  // Sync hash on navigation
+  // Sync hash + scroll reset on navigation
   useEffect(() => {
     window.history.replaceState(null, '', '#page=' + index)
+    window.scrollTo(0, 0)
   }, [index])
 
   const navigate = useCallback((d) => {
-    window.scrollTo(0, 0)
     setDir(d > 0 ? 'fwd' : 'bck')
     setAnimKey(k => k + 1)
     setIndex(i => {
