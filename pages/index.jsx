@@ -149,13 +149,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
 
   /* Cover */
   if (index === -1) {
-    const coverImageSrc = coverVariant === 2 ? coverImage2Src : coverImage1Src
-    if (mobile) return coverVariant === 2
-      ? <CoverMobile2 coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} />
-      : <CoverMobile  coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} />
-    return coverVariant === 2
-      ? <CoverDesktop2 coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} dir={dir} setDir={setDir} />
-      : <CoverDesktop  coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} dir={dir} setDir={setDir} />
+    return <Cover onNext={() => navigate(1)} />
   }
 
   const project     = projects[index]
