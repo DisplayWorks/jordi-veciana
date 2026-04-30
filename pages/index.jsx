@@ -193,13 +193,17 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
-    setIsTouch(touch)
-    const portrait = window.matchMedia('(orientation: portrait)')
-    setMobile(portrait.matches)
-    const h = e => setMobile(e.matches)
-    portrait.addEventListener('change', h)
-    return () => portrait.removeEventListener('change', h)
+    try {
+      const touch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0)
+      setIsTouch(touch)
+      const portrait = window.matchMedia('(orientation: portrait)')
+      setMobile(portrait.matches)
+      const h = e => setMobile(e.matches)
+      portrait.addEventListener('chawie', h)
+      return () => portrait.removeEventListener('change', h)
+    } catch(e) {
+      console.error('media query error', e)
+    }
   }, [])
 
   // Read hash after mount to avoid hydration mismatch
