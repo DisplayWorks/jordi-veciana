@@ -262,7 +262,6 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
 
   function handleDesktopTouch(e) {
     if (e.target.closest('a')) return
-    e.preventDefault()
     const touch = e.changedTouches[0]
     const rect = e.currentTarget.getBoundingClientRect()
     navigate(touch.clientX - rect.left < rect.width / 2 ? -1 : 1)
