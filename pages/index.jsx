@@ -76,7 +76,7 @@ function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
 
 function CoverMobile({ coverImageSrc, onNext, onPrev }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '16px', fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px', WebkitFontSmoothing: 'antialiased' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', padding: '16px', fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px', WebkitFontSmoothing: 'antialiased' }}>
       {/* Top half — text vertically centred */}
       <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
         <div style={{ textAlign: 'center', width: '100%' }}>
@@ -148,7 +148,7 @@ function CoverMobile2({ coverImageSrc, onNext, onPrev }) {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', gap: '16px',
-      padding: '16px', height: '100vh',
+      padding: '16px', height: '100dvh',
       fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px',
       WebkitFontSmoothing: 'antialiased'
     }}>
@@ -191,7 +191,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)')
+    const mq = window.matchMedia('(max-width: 1024px)')
     setMobile(mq.matches)
     const h = e => setMobile(e.matches)
     mq.addEventListener('change', h)
