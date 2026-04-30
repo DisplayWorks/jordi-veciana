@@ -193,7 +193,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(orientation: portrait)')
+    const mq = window.matchMedia('(orientation: portrait)'); console.log("is portrait:", mq.matches, "width:", window.innerWidth)
     setMobile(mq.matches)
     const h = e => setMobile(e.matches)
     mq.addEventListener('change', h)
