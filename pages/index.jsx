@@ -1,0 +1,371 @@
+import { useEffect, useState, useCallback, useRef } from 'react'
+import { client, ALL_PROJECTS_QUERY, SETTINGS_QUERY, getDesktopLayout, getMobileLayout } from '../lib/queries'
+import Description from '../components/Description'
+import MetaBlock from '../components/MetaBlock'
+import Head from "next/head"
+import styles from '../styles/Magazine.module.css'
+
+function fmt(n) { return String(n).padStart(2, '0') }
+
+function Footer({ leftNum, rightNum, category, inquiryMail, isMobile }) {
+  const label = {
+    'architecture':'Architecture','interior-design':'Interior Design',
+    'lighting':'Lighting','product':'Product',
+    'editorial':'Editorial','imprint':'Imprint',
+  }[category] || ''
+  return (
+    <div className={isMobile ? styles.mobileFooter : styles.desktopFooter}>
+      <span className={styles.pageNum}>{leftNum}</span>
+      <div className={styles.footerNav}>
+        <a href={'mailto:' + inquiryMail} className={styles.footerLink}>Jordi Veciana</a>
+        <span>Selected Works</span>
+        <span>{label}</span>
+      </div>
+      <span className={styles.pageNum}>{rightNum}</span>
+    </div>
+  )
+}
+
+function ProjectImages({ images, layout, noGap }) {
+  if (!layout || layout === 0) return null
+  const hasGap = (layout === 2 || layout === 4) && !noGap
+  return (
+    <div className={`${styles.imgContainer}${hasGap ? ' ' + styles.gap : ''}`}>
+      {images.map((img, i) => (
+        <div key={i} className={`${styles.imgWrap} ${styles['img' + layout]}`}>
+          <img src={img.src} alt="" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+
+const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
+
+function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
+  return (
+    <div
+      className={styles.desktopWrapper}
+      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px' }}
+      onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
+      onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
+      onMouseLeave={() => setDir('fwd')}
+    >
+      {/* Left 50% — image, pl 144px */}
+      <div style={{ flex: '0 0 50%', padding: '8px 8px 8px 80px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', overflow: 'hidden' }}>
+        {coverImageSrc && (
+          <img src={coverImageSrc} alt=""
+            style={{ display: 'block', width: 'auto', height: 'auto', maxWidth: '70%', maxHeight: '65vh' }} />
+        )}
+      </div>
+      {/* Right flex-1 — text, pr 144px */}
+      <div style={{ flex: '1 0 0', paddingRight: '144px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <p>Jordi Veciana</p>
+          <p>Selected Works 2018 — 2026</p>
+        </div>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ flex: '1 0 0' }} />
+          <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CoverMobile({ coverImageSrc, onNext, onPrev }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '16px', fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px', WebkitFontSmoothing: 'antialiased' }}>
+      {/* Top half — text vertically centred */}
+      <div style={{ flex: '1 0 0', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <p>Jordi Veciana</p>
+          <p>Selected Works 2018 — 2026</p>
+        </div>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ flex: '1 0 0' }} />
+          <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
+        </div>
+        <div className={styles.mobileNav}>
+          <button className={styles.navArrow} onClick={onPrev}>
+            <img src="/cursor-bck.svg" alt="" width="11" height="13" />
+          </button>
+          <button className={styles.navArrow} onClick={onNext}>
+            <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
+          </button>
+        </div>
+      </div>
+      {/* Bottom half — image */}
+      {coverImageSrc && (
+        <div style={{ flex: '1 0 0', overflow: 'hidden' }}>
+          <img src={coverImageSrc} alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }} />
+        </div>
+      )}
+    </div>
+  )
+}
+
+
+function CoverDesktop2({ coverImageSrc, onNext, onPrev, dir, setDir }) {
+  return (
+    <div
+      className={styles.desktopWrapper}
+      style={{
+        cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`,
+        display: 'flex', gap: '16px', padding: '16px'
+      }}
+      onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
+      onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
+      onMouseLeave={() => setDir('fwd')}
+    >
+      {/* Left half — image fills completely */}
+      <div style={{ flex: '1 0 0', minWidth: '1px', position: 'relative', overflow: 'hidden' }}>
+        {coverImageSrc && (
+          <img src={coverImageSrc} alt=""
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block', pointerEvents: 'none' }} />
+        )}
+      </div>
+      {/* Right half — text vertically centred */}
+      <div style={{ flex: '1 0 0', minWidth: '1px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', height: '100%' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', alignItems: 'flex-start', width: '100%' }}>
+          <div style={{ textAlign: 'center', width: '100%' }}>
+            <p>Jordi Veciana</p>
+            <p>Selected Works 2018 — 2026</p>
+          </div>
+          <div style={{ display: 'flex', width: '100%' }}>
+            <div style={{ flex: '1 0 0' }} />
+            <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CoverMobile2({ coverImageSrc, onNext, onPrev }) {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', gap: '16px',
+      padding: '16px', height: '100vh',
+      fontFamily: "'Monument Grotesk', sans-serif", fontSize: '15px',
+      WebkitFontSmoothing: 'antialiased'
+    }}>
+      {/* Top half — text vertically centred */}
+      <div style={{ flex: '1 0 0', minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '36px' }}>
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <p>Jordi Veciana</p>
+          <p>Selected Works 2018 — 2026</p>
+        </div>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <div style={{ flex: '1 0 0' }} />
+          <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
+        </div>
+        <div className={styles.mobileNav}>
+          <button className={styles.navArrow} onClick={onPrev}>
+            <img src="/cursor-bck.svg" alt="" width="11" height="13" />
+          </button>
+          <button className={styles.navArrow} onClick={onNext}>
+            <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
+          </button>
+        </div>
+      </div>
+      {/* Bottom half — image fills with slight overflow */}
+      <div style={{ flex: '1 0 0', minHeight: 0, position: 'relative', overflow: 'hidden' }}>
+        {coverImageSrc && (
+          <img src={coverImageSrc} alt=""
+            style={{ position: 'absolute', width: '100%', height: '113.94%', top: '-6.97%', left: 0, objectFit: 'cover', objectPosition: 'center', display: 'block', pointerEvents: 'none' }} />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function Magazine({ projects, globalMail, coverImage1Src, coverImage2Src, coverVariant }) {
+  const [index, setIndex] = useState(-1)
+  const [mobile, setMobile] = useState(false)
+  const [dir, setDir]       = useState('fwd')
+  const [animKey, setAnimKey] = useState(0)
+  const touchStartX         = useRef(null)
+  const touchStartY         = useRef(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    setMobile(mq.matches)
+    const h = e => setMobile(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [])
+
+  // Read hash after mount to avoid hydration mismatch
+  useEffect(() => {
+    const h = window.location.hash.match(/page=(\d+)/)
+    if (h) {
+      const n = parseInt(h[1], 10)
+      setIndex(n === -1 ? -1 : Math.min(n, projects.length - 1))
+    }
+  }, [])
+
+  // Sync hash on navigation
+  useEffect(() => {
+    window.history.replaceState(null, '', '#page=' + index)
+  }, [index])
+
+  const navigate = useCallback((d) => {
+    setDir(d > 0 ? 'fwd' : 'bck')
+    setAnimKey(k => k + 1)
+    setIndex(i => {
+      const next = i + d
+      if (next < -1) return projects.length - 1
+      if (next >= projects.length) return -1
+      return next
+    })
+  }, [projects.length])
+
+  useEffect(() => {
+    const h = e => {
+      if (e.key === 'ArrowRight') navigate(1)
+      if (e.key === 'ArrowLeft')  navigate(-1)
+    }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [navigate])
+
+  if (!projects.length) return null
+
+  /* Cover */
+  if (index === -1) {
+    const coverImageSrc = coverVariant === 2 ? coverImage2Src : coverImage1Src
+    if (mobile) return coverVariant === 2
+      ? <CoverMobile2 coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} />
+      : <CoverMobile  coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} />
+    return coverVariant === 2
+      ? <CoverDesktop2 coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} dir={dir} setDir={setDir} />
+      : <CoverDesktop  coverImageSrc={coverImageSrc} onNext={() => navigate(1)} onPrev={() => navigate(-1)} dir={dir} setDir={setDir} />
+  }
+
+  const project     = projects[index]
+  const layout      = getDesktopLayout(project.images)
+  const mobileL     = getMobileLayout(project.mobileImage)
+  const leftNum     = fmt(index * 2 + 1)
+  const rightNum    = fmt(index * 2 + 2)
+  const inquiryMail = project.inquiry || globalMail || 'mail@jordiveciana.com'
+  const mobileImg   = project.mobileImage?.src ? project.mobileImage : project.images?.[0]
+
+  /* Desktop — explicit click only, no auto, no animation */
+  function handleDesktopClick(e) {
+    if (e.target.closest('a')) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    navigate(e.clientX - rect.left < rect.width / 2 ? -1 : 1)
+  }
+
+  function handleMouseMove(e) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd')
+  }
+
+  /* Mobile swipe */
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+  function handleTouchEnd(e) {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    const dy = e.changedTouches[0].clientY - touchStartY.current
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) navigate(dx < 0 ? 1 : -1)
+    touchStartX.current = null
+    touchStartY.current = null
+  }
+
+  const cursorUrl      = dir === 'bck' ? '/cursor-bck.svg' : '/cursor-fwd.svg'
+  const cursorFallback = dir === 'bck' ? 'w-resize' : 'e-resize'
+
+  // Preload adjacent pages for instant navigation
+  const prevIdx = (index - 1 + projects.length) % projects.length
+  const nextIdx = (index + 1) % projects.length
+  const preloadSrcs = [
+    ...(projects[prevIdx]?.images?.map(i => i.src) || []),
+    ...(projects[nextIdx]?.images?.map(i => i.src) || []),
+  ].filter(Boolean)
+
+  /* ── DESKTOP — no animation ── */
+  if (!mobile) return (
+    <>
+      <Head>
+        {preloadSrcs.map(src => (
+          <link key={src} rel="preload" as="image" href={src} />
+        ))}
+      </Head>
+    <div
+      className={styles.desktopWrapper}
+      style={{ cursor: `url('${cursorUrl}') 8 8, ${cursorFallback}` }}
+      onClick={handleDesktopClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setDir('fwd')}
+    >
+      <div className={styles.columns}>
+        <div className={styles.col} /><div className={styles.col} />
+        <div className={styles.col} /><div className={styles.col} />
+        <div className={`${styles.col} ${styles.colName}`}><p>{project.title}</p></div>
+        <div className={`${styles.col} ${styles.colText}`}>
+          <Description description={project.description} />
+          <MetaBlock project={project} inquiryMail={inquiryMail} />
+        </div>
+      </div>
+      <ProjectImages images={project.images || []} layout={layout} noGap={project.noImageGap} />
+      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
+    </div>
+    </>
+  )
+
+  /* ── MOBILE — slide animation ── */
+  const animClass = dir === 'fwd' ? styles.animateInRight : styles.animateInLeft
+
+  return (
+    <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div className={`${styles.tapZone} ${styles.tapZoneLeft}`}  onClick={() => navigate(-1)} />
+      <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)}  />
+      <div key={animKey} className={animClass} style={{ width: '100%' }}>
+        {mobileImg?.src && (
+          <div className={styles.mobileImgContainer}>
+            <img src={mobileImg.src} alt="" />
+          </div>
+        )}
+        <div style={{ height: '52px' }} />
+        <p className={styles.mobileTitle}>{project.title}</p>
+        <div className={styles.mobileTextCol}>
+          <Description description={project.description} />
+          <MetaBlock project={project} inquiryMail={inquiryMail} />
+          <div className={styles.mobileNav}>
+            <button className={styles.navArrow} onClick={() => navigate(-1)}>
+              <img src="/cursor-bck.svg" alt="" width="11" height="13" />
+            </button>
+            <button className={styles.navArrow} onClick={() => navigate(1)}>
+              <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
+            </button>
+          </div>
+          <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} isMobile />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export async function getStaticProps() {
+  const [projects, settings] = await Promise.all([
+    client.fetch(ALL_PROJECTS_QUERY),
+    client.fetch(SETTINGS_QUERY),
+  ])
+  return {
+    props: {
+      projects,
+      globalMail: settings?.inquiryEmail || 'mail@jordiveciana.com',
+      coverImage1Src: settings?.coverImage1Src || null,
+      coverImage2Src: settings?.coverImage2Src || null,
+      coverVariant: settings?.coverVariant || 1,
+    },
+    revalidate: 60,
+  }
+}
