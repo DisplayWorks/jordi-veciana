@@ -18,7 +18,7 @@ function Footer({ leftNum, rightNum, category, inquiryMail, isMobile }) {
       <span className={styles.pageNum}>{leftNum}</span>
       <div className={styles.footerNav}>
         <a href={'mailto:' + inquiryMail} className={styles.footerLink}>Jordi Veciana</a>
-        <span>Selected Works</span>
+        {!isMobile && <span>Selected Works</span>}
         <span>{label}</span>
       </div>
       <span className={styles.pageNum}>{rightNum}</span>
@@ -340,18 +340,22 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   /* ── MOBILE — slide animation ── */
   const animClass = dir === 'fwd' ? styles.animateInRight : styles.animateInLeft
 
+  const hasImage = mobileImg?.src
+
   return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={`${styles.tapZone} ${styles.tapZoneLeft}`}  onClick={() => navigate(-1)} />
       <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)}  />
-      <div key={animKey} className={animClass} style={{ width: '100%' }}>
-        {mobileImg?.src && (
+      <div key={animKey} className={animClass} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {/* Image — only if exists */}
+        {hasImage && (
           <div className={styles.mobileImgContainer}>
             <img src={mobileImg.src} alt="" />
           </div>
         )}
-        <div style={{ height: '52px' }} />
+        {/* Title */}
         <p className={styles.mobileTitle}>{project.title}</p>
+        {/* Text col */}
         <div className={styles.mobileTextCol}>
           <Description description={project.description} />
           <MetaBlock project={project} inquiryMail={inquiryMail} />

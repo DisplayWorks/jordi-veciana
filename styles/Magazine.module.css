@@ -136,12 +136,13 @@
   aspect-ratio: 1201 / 1501;
   position: relative;
   overflow: hidden;
+  margin-bottom: 20px; /* 36px total with gap:16px */
 }
 .mobileImgContainer img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: top center;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
