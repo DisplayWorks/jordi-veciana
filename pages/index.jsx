@@ -191,11 +191,8 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(hover: none) and (pointer: coarse)')
-    setMobile(mq.matches)
-    const h = e => setMobile(e.matches)
-    mq.addEventListener('change', h)
-    return () => mq.removeEventListener('change', h)
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
+    setMobile(isTouch)
   }, [])
 
   // Read hash after mount to avoid hydration mismatch
