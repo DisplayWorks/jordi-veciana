@@ -47,7 +47,7 @@ function CoverDesktop({ coverImageSrc, onNext, onPrev, dir, setDir }) {
   return (
     <div
       className={styles.desktopWrapper}
-      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px', background: 'transparent' }}
+      style={{ cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`, display: 'flex', gap: '16px', padding: '16px' }}
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
       onMouseLeave={() => setDir('fwd')}
@@ -115,7 +115,7 @@ function CoverDesktop2({ coverImageSrc, onNext, onPrev, dir, setDir }) {
       className={styles.desktopWrapper}
       style={{
         cursor: `url('${dir === "bck" ? "/cursor-bck.svg" : "/cursor-fwd.svg"}') 8 8, ${dir === "bck" ? "w-resize" : "e-resize"}`,
-        display: 'flex', gap: '16px', padding: '16px', background: 'transparent'
+        display: 'flex', gap: '16px', padding: '16px'
       }}
       onClick={e => { const rect = e.currentTarget.getBoundingClientRect(); e.clientX - rect.left < rect.width / 2 ? onPrev() : onNext() }}
       onMouseMove={e => { const rect = e.currentTarget.getBoundingClientRect(); setDir(e.clientX - rect.left < rect.width / 2 ? 'bck' : 'fwd') }}
