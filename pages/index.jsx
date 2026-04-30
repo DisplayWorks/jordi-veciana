@@ -222,6 +222,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   }, [index])
 
   const navigate = useCallback((d) => {
+    window.scrollTo(0, 0)
     setDir(d > 0 ? 'fwd' : 'bck')
     setAnimKey(k => k + 1)
     setIndex(i => {
