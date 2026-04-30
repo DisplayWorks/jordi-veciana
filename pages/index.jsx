@@ -191,7 +191,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1024px)')
+    const mq = window.matchMedia('(hover: none) and (pointer: coarse)')
     setMobile(mq.matches)
     const h = e => setMobile(e.matches)
     mq.addEventListener('change', h)
