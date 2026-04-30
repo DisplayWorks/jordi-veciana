@@ -191,8 +191,11 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   const touchStartY         = useRef(null)
 
   useEffect(() => {
-    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
-    setMobile(isTouch)
+    const mq = window.matchMedia('(max-width: 768px)')
+    setMobile(mq.matches)
+    const h = e => setMobile(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
   }, [])
 
   // Read hash after mount to avoid hydration mismatch
@@ -301,6 +304,8 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
