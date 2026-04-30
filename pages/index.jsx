@@ -220,6 +220,8 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
   useEffect(() => {
     window.history.replaceState(null, '', '#page=' + index)
     window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [index])
 
   const navigate = useCallback((d) => {
@@ -357,7 +359,7 @@ export default function Magazine({ projects, globalMail, coverImage1Src, coverIm
         {/* Title */}
         <p className={styles.mobileTitle}>{project.title}</p>
         {/* Text col */}
-        <div className={styles.mobileTextCol}>
+        <div className={styles.mobileTextCol} style={{ flex: '1 0 0' }}>
           <Description description={project.description} />
           <MetaBlock project={project} inquiryMail={inquiryMail} />
           <div className={styles.mobileNav}>
