@@ -126,8 +126,12 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const cursorFallback = dir === 'bck' ? 'w-resize' : 'e-resize'
 
   // Mobile portrait
+  // DEBUG — remove after testing
+  const debugStyle = { position: 'fixed', top: 8, left: 8, background: 'red', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999 }
+
   if (layout === 'mobile') return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div style={debugStyle}>layout: {layout}</div>
       <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
       <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -157,6 +161,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   // Tablet landscape — desktop look, swipe navigation
   if (layout === 'tablet') return (
     <div className={styles.desktopWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div style={debugStyle}>layout: {layout}</div>
       <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
       <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div className={styles.columns}>
