@@ -181,6 +181,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
           width: '100%',
           aspectRatio: imgOrientation === 'landscape' ? '2000/1501' : '1201/1501',
           overflow: 'hidden',
+          marginBottom: '36px',
           flexShrink: 0,
         }}>
           <img src={mobileImg.src} alt="" style={{
