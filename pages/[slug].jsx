@@ -175,6 +175,8 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
       onClick={handleDesktopClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setDir('fwd')}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
