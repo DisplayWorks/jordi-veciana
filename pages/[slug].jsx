@@ -129,7 +129,6 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
 
   if (layout === 'mobile') return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div style={debugStyle}>mobile</div>
       <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
       <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -158,7 +157,6 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
 
   if (layout === 'tablet') return (
     <div className={styles.desktopWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div style={debugStyle}>tablet</div>
       <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
       <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div className={styles.columns}>
@@ -186,8 +184,9 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         onClick={handleDesktopClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setDir('fwd')}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
-        <div style={debugStyle}>desktop ({String(layout)})</div>
         <div className={styles.columns}>
           <div className={styles.col} /><div className={styles.col} />
           <div className={styles.col} /><div className={styles.col} />
