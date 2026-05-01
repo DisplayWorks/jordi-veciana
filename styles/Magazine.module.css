@@ -11,13 +11,10 @@
 
 .desktopWrapper {
   position: relative;
-  
-  position: relative;
   width: 100%;
   height: 100vh;
   height: 100dvh;
   padding: var(--margin-s);
-  overflow: hidden;
   font-family: var(--font);
   font-size: var(--fs);
   font-weight: 400;
