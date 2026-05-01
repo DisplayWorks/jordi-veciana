@@ -121,6 +121,49 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     ...(nextProject?.images?.map(i => i.src) || []),
   ].filter(Boolean)
 
+  // Tablet landscape = desktop layout + mobile touch
+  if (!mobile && isTouch) return (
+    <div
+      className={styles.desktopWrapper}
+      style={{ background: 'rgba(255,0,0,0.1)' }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div className={`${styles.tapZone} ${styles.tapZoneLeft}`}  onClick={() => navigate(-1)} />
+      <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)}  />
+      <div className={styles.columns}>
+        <div className={styles.col} /><div className={styles.col} />
+        <div className={styles.col} /><div className={styles.col} />
+        <div className={`${styles.col} ${styles.colName}`}><p>{project.title}</p></div>
+        <div className={`${styles.col} ${styles.colText}`}>
+          <Description description={project.description} />
+          <MetaBlock project={project} inquiryMail={inquiryMail} />
+        </div>
+      </div>
+      <ProjectImages images={project.images || []} layout={layout} noGap={project.noImageGap} />
+      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
+    </div>
+  )
+
+  // Desktop = mouse navigation
+  if (!mobile && isTouch) return (
+    <div className={styles.desktopWrapper} style={{background:'rgba(255,0,0,0.1)'}} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      <div className={`${styles.tapZone} ${styles.tapZoneLeft}`} onClick={() => navigate(-1)} />
+      <div className={`${styles.tapZone} ${styles.tapZoneRight}`} onClick={() => navigate(1)} />
+      <div className={styles.columns}>
+        <div className={styles.col}/><div className={styles.col}/>
+        <div className={styles.col}/><div className={styles.col}/>
+        <div className={`${styles.col} ${styles.colName}`}><p>{project.title}</p></div>
+        <div className={`${styles.col} ${styles.colText}`}>
+          <Description description={project.description} />
+          <MetaBlock project={project} inquiryMail={inquiryMail} />
+        </div>
+      </div>
+      <ProjectImages images={project.images || []} layout={layout} noGap={project.noImageGap} />
+      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
+    </div>
+  )
+
   if (!mobile) return (
     <>
       <Head>
