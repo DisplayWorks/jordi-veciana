@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 
-export default function Home({ projects, ogImageSrc }) {
+export default function Home({ projects, ogImageSrc, coverName, coverSubtitle, coverCategories }) {
   const router = useRouter()
   const [layout, setLayout] = useState('desktop')
 
@@ -53,12 +53,12 @@ export default function Home({ projects, ogImageSrc }) {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
           <div style={{ textAlign: 'center', width: '100%' }}>
-            <p>Jordi Veciana</p>
-            <p>Selected Works 2018 — 2026</p>
+            <p>{coverName || 'Jordi Veciana'}</p>
+            <p>{coverSubtitle || 'Selected Works 2018 — 2026'}</p>
           </div>
           <div style={{ display: 'flex', width: '100%' }}>
             <div style={{ flex: '1 0 0' }} />
-            <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
+            <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{coverCategories || CATEGORIES}</div>
           </div>
           {layout === 'mobile' && (
             <div style={{ display: 'flex', width: '100%' }}>
@@ -84,6 +84,9 @@ export async function getStaticProps() {
       projects,
       globalMail: settings?.inquiryEmail || 'mail@jordiveciana.com',
       ogImageSrc: settings?.ogImageSrc || null,
+      coverName: settings?.coverName || null,
+      coverSubtitle: settings?.coverSubtitle || null,
+      coverCategories: settings?.coverCategories || null,
     },
     revalidate: 60,
   }
