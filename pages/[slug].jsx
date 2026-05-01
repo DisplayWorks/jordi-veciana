@@ -18,7 +18,7 @@ function Footer({ leftNum, rightNum, category, inquiryMail, isMobile }) {
     <div className={isMobile ? styles.mobileFooter : styles.desktopFooter}>
       <span className={styles.pageNum}>{leftNum}</span>
       <div className={styles.footerNav}>
-        <a href={"mailto:" + inquiryMail} className={styles.footerLink}>Jordi Veciana</a>
+        <a href={'mailto:' + inquiryMail} className={styles.footerLink}>Jordi Veciana</a>
         {!isMobile && <span>Selected Works</span>}
         <span>{label}</span>
       </div>
@@ -31,9 +31,9 @@ function ProjectImages({ images, layout, noGap }) {
   if (!layout || layout === 0) return null
   const hasGap = (layout === 2 || layout === 4) && !noGap
   return (
-    <div className={hasGap ? styles.imgContainer + " " + styles.gap : styles.imgContainer}>
+    <div className={styles.imgContainer + (hasGap ? ' ' + styles.gap : '')}>
       {images.map((img, i) => (
-        <div key={i} className={styles.imgWrap + " " + styles["img" + layout]}>
+        <div key={i} className={styles.imgWrap + ' ' + styles['img' + layout]}>
           <img src={img.src} alt="" />
         </div>
       ))}
@@ -44,7 +44,7 @@ function ProjectImages({ images, layout, noGap }) {
 export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const router = useRouter()
   const [layout, setLayout] = useState(null)
-  const [dir, setDir] = useState("fwd")
+  const [dir, setDir] = useState('fwd')
   const touchStartX = useRef(null)
   const touchStartY = useRef(null)
 
@@ -125,15 +125,13 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const cursorUrl = dir === 'bck' ? '/cursor-bck.svg' : '/cursor-fwd.svg'
   const cursorFallback = dir === 'bck' ? 'w-resize' : 'e-resize'
 
-  // Mobile portrait
-  // DEBUG — remove after testing
-  const debugStyle = { position: 'fixed', top: 8, left: 8, background: 'red', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999 }
+  const debugStyle = { position: 'fixed', top: 8, left: 8, background: 'red', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999, pointerEvents: 'none' }
 
   if (layout === 'mobile') return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div style={debugStyle}>layout: {layout}</div>
-      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
-      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
+      <div style={debugStyle}>mobile</div>
+      <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
+      <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {hasImage && (
           <div className={styles.mobileImgContainer}>
@@ -158,17 +156,16 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     </div>
   )
 
-  // Tablet landscape — desktop look, swipe navigation
   if (layout === 'tablet') return (
     <div className={styles.desktopWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div style={debugStyle}>layout: {layout}</div>
-      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
-      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
+      <div style={debugStyle}>tablet</div>
+      <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
+      <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
         <div className={styles.col} /><div className={styles.col} />
-        <div className={styles.col + " " + styles.colName}><p>{project.title}</p></div>
-        <div className={styles.col + " " + styles.colText}>
+        <div className={styles.col + ' ' + styles.colName}><p>{project.title}</p></div>
+        <div className={styles.col + ' ' + styles.colText}>
           <Description description={project.description} />
           <MetaBlock project={project} inquiryMail={inquiryMail} />
         </div>
@@ -178,7 +175,6 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     </div>
   )
 
-  // Desktop — mouse navigation (also SSR fallback with layout === null)
   return (
     <>
       <Head>
@@ -186,18 +182,17 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
       </Head>
       <div
         className={styles.desktopWrapper}
-      >
-        <div style={{ position: 'fixed', top: 8, left: 8, background: 'blue', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999 }}>layout: {layout || 'null'}</div>
-        <div style={{ cursor: "url('" + cursorUrl + "') 8 8, " + cursorFallback }}
+        style={{ cursor: "url('" + cursorUrl + "') 8 8, " + cursorFallback }}
         onClick={handleDesktopClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setDir('fwd')}
       >
+        <div style={debugStyle}>desktop ({String(layout)})</div>
         <div className={styles.columns}>
           <div className={styles.col} /><div className={styles.col} />
           <div className={styles.col} /><div className={styles.col} />
-          <div className={styles.col + " " + styles.colName}><p>{project.title}</p></div>
-          <div className={styles.col + " " + styles.colText}>
+          <div className={styles.col + ' ' + styles.colName}><p>{project.title}</p></div>
+          <div className={styles.col + ' ' + styles.colText}>
             <Description description={project.description} />
             <MetaBlock project={project} inquiryMail={inquiryMail} />
           </div>
