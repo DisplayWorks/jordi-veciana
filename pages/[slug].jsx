@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { client, ALL_PROJECTS_QUERY, SETTINGS_QUERY, getDesktopLayout, getMobileLayout } from '../lib/queries'
@@ -113,7 +114,18 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const cursorUrl = dir === 'bck' ? '/cursor-bck.svg' : '/cursor-fwd.svg'
   const cursorFallback = dir === 'bck' ? 'w-resize' : 'e-resize'
 
+  const prevProject = projects[(index - 1 + projects.length) % projects.length]
+  const nextProject = projects[(index + 1) % projects.length]
+  const preloadSrcs = [
+    ...(prevProject?.images?.map(i => i.src) || []),
+    ...(nextProject?.images?.map(i => i.src) || []),
+  ].filter(Boolean)
+
   if (!mobile) return (
+    <>
+      <Head>
+        {preloadSrcs.map(src => <link key={src} rel="preload" as="image" href={src} />)}
+      </Head>
     <div
       className={styles.desktopWrapper}
       style={{ cursor: `url('${cursorUrl}') 8 8, ${cursorFallback}` }}
@@ -137,6 +149,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
       </>}
       <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
     </div>
+    </>
   )
 
   return (
