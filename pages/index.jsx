@@ -43,7 +43,7 @@ function ProjectImages({ images, layout, noGap }) {
 
 const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 
-function Cover({ onNext }) {
+function Cover({ onNext, isMobile }) {
   return (
     <div
       onClick={onNext}
@@ -74,7 +74,7 @@ function Cover({ onNext }) {
           <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
         </div>
         {/* Arrow — mobile only */}
-        {mobile && (
+        {isMobile && (
           <div style={{ display: 'flex', width: '100%' }}>
             <div style={{ flex: '1 0 0' }} />
             <div style={{ flex: '1 0 0' }}>
@@ -152,7 +152,7 @@ export default function Magazine({ projects, globalMail }) {
 
   /* Cover */
   if (index === -1) {
-    return <Cover onNext={() => navigate(1)} />
+    return <Cover onNext={() => navigate(1)} isMobile={mobile} />
   }
 
   const project     = projects[index]
