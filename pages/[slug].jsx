@@ -143,10 +143,8 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         </div>
       </div>
       <ProjectImages images={project.images || []} layout={layout} noGap={project.noImageGap} />
-      {isTouch && <>
-        <div onClick={() => navigate(-1)} style={{ position: 'absolute', left: 0, top: 0, width: '50%', height: '100%', zIndex: 5, background: 'rgba(255,0,0,0.2)' }} />
-        <div onClick={() => navigate(1)}  style={{ position: 'absolute', right: 0, top: 0, width: '50%', height: '100%', zIndex: 5, background: 'rgba(0,0,255,0.2)' }} />
-      </>}
+      <div onClick={() => navigate(-1)} style={{ position: 'absolute', left: 0, top: 0, width: '50%', height: '100%', zIndex: 5, background: 'rgba(255,0,0,0.2)' }} />
+      <div onClick={() => navigate(1)}  style={{ position: 'absolute', right: 0, top: 0, width: '50%', height: '100%', zIndex: 5, background: 'rgba(0,0,255,0.2)' }} />
       <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} />
     </div>
     </>
