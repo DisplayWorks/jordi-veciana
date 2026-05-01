@@ -186,6 +186,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         onMouseLeave={() => setDir('fwd')}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onPointerUp={e => { if (e.pointerType === 'touch') { const rect = e.currentTarget.getBoundingClientRect(); navigate(e.clientX - rect.left < rect.width / 2 ? -1 : 1) }}}
       >
         <div className={styles.columns}>
           <div className={styles.col} /><div className={styles.col} />
