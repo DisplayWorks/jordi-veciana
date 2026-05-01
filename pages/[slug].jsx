@@ -55,9 +55,11 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     const detect = () => {
       const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
       const isPortrait = window.matchMedia('(orientation: portrait)').matches
-      if (isTouch && isPortrait) setLayout('mobile')
-      else if (isTouch) setLayout('tablet')
-      else setLayout('desktop')
+      const isTablet = window.screen.width >= 600 || window.screen.height >= 600
+      if (!isTouch) setLayout('desktop')
+      else if (isPortrait && isTablet) setLayout('tablet-portrait')
+      else if (isPortrait) setLayout('mobile')
+      else setLayout('tablet')
     }
     detect()
     const mq = window.matchMedia('(orientation: portrait)')
@@ -89,6 +91,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const inquiryMail = project.inquiry || globalMail || 'mail@jordiveciana.com'
   const mobileImg   = project.mobileImage?.src ? project.mobileImage : project.images?.[0]
   const hasImage    = mobileImg?.src
+  const imgOrientation = mobileImg?.orientation || 'portrait'
 
   function handleDesktopClick(e) {
     if (e.target.closest('a')) return
@@ -125,8 +128,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   const cursorUrl = dir === 'bck' ? '/cursor-bck.svg' : '/cursor-fwd.svg'
   const cursorFallback = dir === 'bck' ? 'w-resize' : 'e-resize'
 
-  const debugStyle = { position: 'fixed', top: 8, left: 8, background: 'red', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999, pointerEvents: 'none' }
-
+  // ── Mobile portrait (phone) ──────────────────────────────────────
   if (layout === 'mobile') return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
@@ -155,6 +157,64 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     </div>
   )
 
+  // ── Tablet portrait ───────────────────────────────────────────────
+  if (layout === 'tablet-portrait') return (
+    <div
+      className={styles.mobileWrapper}
+      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
+      <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
+
+      {/* Image */}
+      {hasImage && (
+        <div style={{
+          width: '100%',
+          aspectRatio: imgOrientation === 'landscape' ? '1201/600' : '1201/1501',
+          overflow: 'hidden',
+          marginBottom: '36px',
+          flexShrink: 0,
+        }}>
+          <img src={mobileImg.src} alt="" style={{
+            width: '100%', height: '100%',
+            objectFit: imgOrientation === 'landscape' ? 'contain' : 'cover',
+            objectPosition: 'center',
+            display: 'block',
+          }} />
+        </div>
+      )}
+
+      {/* Two-column text area — fills remaining space */}
+      <div style={{ display: 'flex', gap: '16px', flex: '1 0 0', alignItems: 'flex-start', minHeight: 0 }}>
+        {/* Left col — title */}
+        <div style={{ flex: '1 0 0', minWidth: 0 }}>
+          <p>{project.title}</p>
+        </div>
+        {/* Right col — description + meta */}
+        <div style={{ flex: '1 0 0', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '72px', paddingBottom: '16px' }}>
+          <Description description={project.description} />
+          <MetaBlock project={project} inquiryMail={inquiryMail} />
+        </div>
+      </div>
+
+      {/* Nav */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexShrink: 0 }}>
+        <button className={styles.navArrow} onClick={() => navigate(-1)}>
+          <img src="/cursor-bck.svg" alt="" width="11" height="13" />
+        </button>
+        <button className={styles.navArrow} onClick={() => navigate(1)}>
+          <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
+        </button>
+      </div>
+
+      {/* Footer */}
+      <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} isMobile />
+    </div>
+  )
+
+  // ── Tablet landscape — desktop look, swipe navigation ────────────
   if (layout === 'tablet') return (
     <div className={styles.desktopWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
@@ -173,6 +233,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     </div>
   )
 
+  // ── Desktop — mouse navigation ────────────────────────────────────
   return (
     <>
       <Head>
@@ -187,8 +248,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onPointerDown={e => { if (e.pointerType !== 'mouse') { touchStartX.current = e.clientX; touchStartY.current = e.clientY }}}
-        onPointerUp={e => { if (e.pointerType !== 'mouse' && touchStartX.current !== null) { const dx = e.clientX - touchStartX.current; const dy = e.clientY - touchStartY.current; if (Math.abs(dx) < 10 && Math.abs(dy) < 10) { navigate(e.clientX < e.currentTarget.getBoundingClientRect().width / 2 + e.currentTarget.getBoundingClientRect().left ? -1 : 1) } touchStartX.current = null }}}
-        onPointerUp={e => { if (e.pointerType === 'touch') { const rect = e.currentTarget.getBoundingClientRect(); navigate(e.clientX - rect.left < rect.width / 2 ? -1 : 1) }}}
+        onPointerUp={e => { if (e.pointerType !== 'mouse' && touchStartX.current !== null) { const dx = e.clientX - touchStartX.current; const dy = e.clientY - touchStartY.current; if (Math.abs(dx) < 10 && Math.abs(dy) < 10) { navigate(e.clientX < e.currentTarget.getBoundingClientRect().left + e.currentTarget.getBoundingClientRect().width / 2 ? -1 : 1) } touchStartX.current = null }}}
       >
         <div className={styles.columns}>
           <div className={styles.col} /><div className={styles.col} />
