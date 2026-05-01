@@ -186,6 +186,8 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         onMouseLeave={() => setDir('fwd')}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onPointerDown={e => { if (e.pointerType !== 'mouse') { touchStartX.current = e.clientX; touchStartY.current = e.clientY }}}
+        onPointerUp={e => { if (e.pointerType !== 'mouse' && touchStartX.current !== null) { const dx = e.clientX - touchStartX.current; const dy = e.clientY - touchStartY.current; if (Math.abs(dx) < 10 && Math.abs(dy) < 10) { navigate(e.clientX < e.currentTarget.getBoundingClientRect().width / 2 + e.currentTarget.getBoundingClientRect().left ? -1 : 1) } touchStartX.current = null }}}
         onPointerUp={e => { if (e.pointerType === 'touch') { const rect = e.currentTarget.getBoundingClientRect(); navigate(e.clientX - rect.left < rect.width / 2 ? -1 : 1) }}}
       >
         <div className={styles.columns}>
