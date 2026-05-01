@@ -163,6 +163,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   if (layout === "tablet") return (
     <div
       className={styles.desktopWrapper}
+      style={{ background: "rgba(255,0,0,0.1)" }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
