@@ -238,9 +238,15 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   )
 
   // ── Desktop — mouse navigation ────────────────────────────────────
+  const ogImg = mobileImg?.src || ''
   return (
     <>
       <Head>
+        <title>{project.title} — Jordi Veciana</title>
+        <meta property="og:title" content={project.title + ' — Jordi Veciana'} />
+        <meta property="og:image" content={ogImg} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogImg} />
         {preloadSrcs.map(src => <link key={src} rel="preload" as="image" href={src} />)}
       </Head>
       <div
