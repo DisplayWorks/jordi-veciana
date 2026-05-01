@@ -160,7 +160,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   )
 
   // Tablet landscape — desktop look, touch swipe
-  if (layout === "tablet") return (
+  if (layout === "tablet" || layout === "desktop" || layout === null) return (
     <div
       className={styles.desktopWrapper}
       style={{ background: "rgba(255,0,0,0.1)" }}
