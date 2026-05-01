@@ -9,8 +9,10 @@ const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 export default function Home({ projects, globalMail, ogImageSrc }) {
   const router = useRouter()
   const [mobile, setMobile] = useState(false)
+  const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
+    setIsTouch(('ontouchstart' in window) || navigator.maxTouchPoints > 0)
     const mq = window.matchMedia('(orientation: portrait)')
     setMobile(mq.matches)
     const h = e => setMobile(e.matches)
@@ -37,7 +39,6 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
       </Head>
       <div
         onClick={goToFirst}
-        onTouchEnd={() => goToFirst()}
         style={{
           width: '100%', height: '100dvh', padding: '16px',
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
@@ -46,6 +47,9 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
           lineHeight: 'normal', WebkitFontSmoothing: 'antialiased', background: '#fff',
         }}
       >
+        {isTouch && <>
+          <div onTouchEnd={() => goToFirst()} onClick={() => goToFirst()} style={{ position: 'absolute', inset: 0, zIndex: 5 }} />
+        </>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
           <div style={{ textAlign: 'center', width: '100%' }}>
             <p>Jordi Veciana</p>
