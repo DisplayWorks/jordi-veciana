@@ -8,7 +8,7 @@ const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 
 export default function Home({ projects, globalMail, ogImageSrc }) {
   const router = useRouter()
-  const [mobile, setMobile] = useState(false)
+  const [layout, setLayout] = useState('desktop')
   const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
             <div style={{ flex: '1 0 0' }} />
             <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
           </div>
-          {mobile && (
+          {layout === 'mobile' && (
             <div style={{ display: 'flex', width: '100%' }}>
               <div style={{ flex: '1 0 0' }} />
               <div style={{ flex: '1 0 0' }}>

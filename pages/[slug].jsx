@@ -133,8 +133,8 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   // Mobile portrait
   if (layout === "mobile") return (
     <div className={styles.mobileWrapper} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
-      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
+      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} onTouchEnd={() => navigate(-1)} />
+      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  onTouchEnd={() => navigate(1)} />
       <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "16px" }}>
         {hasImage && (
           <div className={styles.mobileImgContainer}>
@@ -160,15 +160,15 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   )
 
   // Tablet landscape — desktop look, touch swipe
-  if (layout === "tablet" || layout === "desktop" || layout === null) return (
+  if (layout === "tablet") return (
     <div
       className={styles.desktopWrapper}
       style={{ background: "rgba(255,0,0,0.1)" }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
-      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  />
+      <div className={styles.tapZone + " " + styles.tapZoneLeft}  onClick={() => navigate(-1)} onTouchEnd={() => navigate(-1)} />
+      <div className={styles.tapZone + " " + styles.tapZoneRight} onClick={() => navigate(1)}  onTouchEnd={() => navigate(1)} />
       <div className={styles.columns}>
         <div className={styles.col} /><div className={styles.col} />
         <div className={styles.col} /><div className={styles.col} />
