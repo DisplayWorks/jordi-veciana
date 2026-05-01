@@ -186,7 +186,9 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
       </Head>
       <div
         className={styles.desktopWrapper}
-        style={{ cursor: "url('" + cursorUrl + "') 8 8, " + cursorFallback }}
+      >
+        <div style={{ position: 'fixed', top: 8, left: 8, background: 'blue', color: 'white', padding: '4px 8px', fontSize: '12px', zIndex: 9999 }}>layout: {layout || 'null'}</div>
+        <div style={{ cursor: "url('" + cursorUrl + "') 8 8, " + cursorFallback }}
         onClick={handleDesktopClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setDir('fwd')}
