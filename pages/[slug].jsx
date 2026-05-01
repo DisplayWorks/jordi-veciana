@@ -74,6 +74,15 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
     else router.push('/' + projects[next].slug)
   }, [index, projects, router])
 
+  // Prefetch adjacent pages for instant navigation
+  useEffect(() => {
+    const prev = projects[(index - 1 + projects.length) % projects.length]
+    const next = projects[(index + 1) % projects.length]
+    if (prev) router.prefetch('/' + prev.slug)
+    if (next) router.prefetch('/' + next.slug)
+    router.prefetch('/')
+  }, [index, projects, router])
+
   useEffect(() => {
     const h = e => {
       if (e.key === 'ArrowRight') navigate(1)
