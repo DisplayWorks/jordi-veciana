@@ -160,40 +160,43 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
   // ── Tablet portrait ───────────────────────────────────────────────
   if (layout === 'tablet-portrait') return (
     <div
-      className={styles.mobileWrapper}
-      style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}
+      style={{
+        display: 'flex', flexDirection: 'column',
+        minHeight: '100dvh',
+        padding: '16px 16px 36px',
+        fontFamily: "'Monument Grotesk', sans-serif",
+        fontSize: '15px', lineHeight: 'normal',
+        WebkitFontSmoothing: 'antialiased',
+        gap: '16px',
+      }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
       <div className={styles.tapZone + ' ' + styles.tapZoneLeft}  onClick={() => navigate(-1)} />
       <div className={styles.tapZone + ' ' + styles.tapZoneRight} onClick={() => navigate(1)}  />
 
-      {/* Image */}
+      {/* Image — always 100% width */}
       {hasImage && (
         <div style={{
           width: '100%',
-          aspectRatio: imgOrientation === 'landscape' ? '1201/600' : '1201/1501',
+          aspectRatio: imgOrientation === 'landscape' ? '2000/1501' : '1201/1501',
           overflow: 'hidden',
-          marginBottom: '36px',
           flexShrink: 0,
         }}>
           <img src={mobileImg.src} alt="" style={{
             width: '100%', height: '100%',
             objectFit: imgOrientation === 'landscape' ? 'contain' : 'cover',
-            objectPosition: 'center',
-            display: 'block',
+            objectPosition: 'center', display: 'block',
           }} />
         </div>
       )}
 
-      {/* Two-column text area — fills remaining space */}
-      <div style={{ display: 'flex', gap: '16px', flex: '1 0 0', alignItems: 'flex-start', minHeight: 0 }}>
-        {/* Left col — title */}
+      {/* Two-column text — flex:1 pushes footer to bottom */}
+      <div style={{ display: 'flex', gap: '16px', flex: '1 0 0', alignItems: 'flex-start' }}>
         <div style={{ flex: '1 0 0', minWidth: 0 }}>
           <p>{project.title}</p>
         </div>
-        {/* Right col — description + meta */}
-        <div style={{ flex: '1 0 0', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '72px', paddingBottom: '16px' }}>
+        <div style={{ flex: '1 0 0', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '72px' }}>
           <Description description={project.description} />
           <MetaBlock project={project} inquiryMail={inquiryMail} />
         </div>
@@ -209,7 +212,7 @@ export default function ProjectPage({ projects, currentSlug, globalMail }) {
         </button>
       </div>
 
-      {/* Footer */}
+      {/* Footer — always at bottom */}
       <Footer leftNum={leftNum} rightNum={rightNum} category={project.category} inquiryMail={inquiryMail} isMobile />
     </div>
   )
