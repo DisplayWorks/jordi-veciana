@@ -37,6 +37,7 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
       </Head>
       <div
         onClick={goToFirst}
+        onTouchEnd={e => { e.preventDefault(); goToFirst() }}
         style={{
           width: '100%', height: '100dvh', padding: '16px',
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
