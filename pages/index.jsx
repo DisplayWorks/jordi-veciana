@@ -73,6 +73,15 @@ function Cover({ onNext }) {
           <div style={{ flex: '1 0 0' }} />
           <div style={{ flex: '1 0 0', whiteSpace: 'pre-line' }}>{CATEGORIES}</div>
         </div>
+        {/* Arrow — mobile only */}
+        {mobile && (
+          <div style={{ display: 'flex', width: '100%' }}>
+            <div style={{ flex: '1 0 0' }} />
+            <div style={{ flex: '1 0 0' }}>
+              <img src="/cursor-fwd.svg" alt="" width="11" height="13" />
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
