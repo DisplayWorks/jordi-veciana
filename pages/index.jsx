@@ -2,22 +2,25 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { client, ALL_PROJECTS_QUERY, SETTINGS_QUERY } from '../lib/queries'
 import { useEffect, useState } from 'react'
-import styles from '../styles/Magazine.module.css'
 
 const CATEGORIES = 'Architecture\nLighting\nInterior Design\nProducts'
 
-export default function Home({ projects, globalMail, ogImageSrc }) {
+export default function Home({ projects, ogImageSrc }) {
   const router = useRouter()
   const [layout, setLayout] = useState('desktop')
-  const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
-    setIsTouch(('ontouchstart' in window) || navigator.maxTouchPoints > 0)
+    const detect = () => {
+      const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0
+      const isPortrait = window.matchMedia('(orientation: portrait)').matches
+      if (isTouch && isPortrait) setLayout('mobile')
+      else if (isTouch) setLayout('tablet')
+      else setLayout('desktop')
+    }
+    detect()
     const mq = window.matchMedia('(orientation: portrait)')
-    setMobile(mq.matches)
-    const h = e => setMobile(e.matches)
-    mq.addEventListener('change', h)
-    return () => mq.removeEventListener('change', h)
+    mq.addEventListener('change', detect)
+    return () => mq.removeEventListener('change', detect)
   }, [])
 
   const goToFirst = () => {
@@ -30,7 +33,7 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
     <>
       <Head>
         <title>Jordi Veciana — Selected Works</title>
-        <meta property="og:title" content="Jordi Veciana — Selected Works 2018–2026" />
+        <meta property="og:title" content="Jordi Veciana — Selected Works 2018-2026" />
         <meta property="og:description" content="Architecture, Lighting, Interior Design, Products" />
         <meta property="og:image" content={ogImage} />
         <meta property="og:type" content="website" />
@@ -39,6 +42,7 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
       </Head>
       <div
         onClick={goToFirst}
+        onTouchEnd={() => goToFirst()}
         style={{
           width: '100%', height: '100dvh', padding: '16px',
           display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
@@ -47,9 +51,6 @@ export default function Home({ projects, globalMail, ogImageSrc }) {
           lineHeight: 'normal', WebkitFontSmoothing: 'antialiased', background: '#fff',
         }}
       >
-        {isTouch && <>
-          <div onTouchEnd={() => goToFirst()} onClick={() => goToFirst()} style={{ position: 'absolute', inset: 0, zIndex: 5 }} />
-        </>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
           <div style={{ textAlign: 'center', width: '100%' }}>
             <p>Jordi Veciana</p>
